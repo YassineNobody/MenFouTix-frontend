@@ -59,7 +59,7 @@ export const MovieDetails = ({ movie }: Props) => {
             {movie.actors.map((actor) => (
               <Link
                 key={actor.id}
-                to={`/catalog?actorId=${actor.id}`}
+                to={"#"}//`/catalog?actorId=${actor.id}`}
                 className="rounded-md border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs text-zinc-300 transition-colors hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-400"
               >
                 {actor.name}

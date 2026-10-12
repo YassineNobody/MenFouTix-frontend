@@ -63,7 +63,7 @@ export default function GenreMoviesPage({
     data: genres,
     isLoading: genresLoading,
     isError: genresError,
-  } = useGenres("film");
+  } = useGenres(isSeries ? "série" : "film");
   const genre = genres?.find((item) => item.id === genreId);
 
   const { data, isLoading, isError } = useQuery({
@@ -138,6 +138,7 @@ export default function GenreMoviesPage({
         : "lg:grid-cols-6";
 
   const works = data?.items ?? [];
+
 
   return (
     <div className="relative min-h-screen overflow-hidden pt-20 lg:px-16 bg-black text-white">

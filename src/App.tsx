@@ -3,8 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { LayoutRouter } from "./components/Layout/Layout";
 import { ScrollToTop } from "./components/Layout/ScrollToTop";
 import HomePage from "./pages/HomePage/HomePage";
-import CatalogPage from "./pages/CatalogPage/CatalogPage";
-import RequestPage from "./pages/RequestPage/RequestPage";
 import MoviePage from "./pages/MoviePage/MoviePage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import MoviesPage from "./pages/MoviePage/MoviesPage";
@@ -25,8 +23,6 @@ function App() {
         <Routes>
           <Route path="/" element={<LayoutRouter />}>
             <Route index element={<HomePage />} />
-            <Route path="catalog" element={<CatalogPage />} />
-            <Route path="request" element={<RequestPage />} />
             <Route path="search" element={<SearchPage />} />
             <Route path="movie/:id" element={<MoviePage />} />
             <Route path="movies" element={<MoviesPage />} />
