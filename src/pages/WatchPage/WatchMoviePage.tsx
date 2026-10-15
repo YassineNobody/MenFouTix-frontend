@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "react-router";
+import { useParams } from "react-router";
+import { Link } from "../../catalog/navigation";
 import { getFilmByTmdbId } from "../../services/films";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 

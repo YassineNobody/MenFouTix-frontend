@@ -1,4 +1,5 @@
-import { Link } from "react-router";
+import { Link } from "../../catalog/navigation";
+import { Link as RouterLink } from "react-router";
 
 export const Footer = () => (
   <footer className="relative z-10 mt-16 border-t border-white/10 bg-zinc-950/90 px-5 py-8 text-sm text-zinc-400 md:px-8">
@@ -10,6 +11,7 @@ export const Footer = () => (
         <p className="mt-1 text-xs text-zinc-500">Films et séries à découvrir.</p>
       </div>
       <nav aria-label="Navigation du pied de page" className="flex flex-wrap gap-x-5 gap-y-2">
+        <RouterLink to="/" className="hover:text-white">Changer VF / VO</RouterLink>
         <Link to="/" className="hover:text-white">Accueil</Link>
         <Link to="/movies" className="hover:text-white">Films</Link>
         <Link to="/tv-shows" className="hover:text-white">Séries</Link>

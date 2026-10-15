@@ -1,10 +1,13 @@
-import { Link } from "react-router";
+import { Link } from "../../catalog/navigation";
 import { motion } from "framer-motion";
 import { NavbarDesktop } from "./NavbarDestop";
 import { NavbarMobileMenu } from "./NavbarMobileMenu";
 import { NavbarSearch } from "./NavbarSearch";
+import { Link as RouterLink } from "react-router";
+import { useCatalogVersion } from "../../catalog/context";
 
 export const Navbar = () => {
+  const version = useCatalogVersion();
   return (
     <motion.nav
       initial={{ y: -80, opacity: 0 }}
@@ -32,6 +35,9 @@ export const Navbar = () => {
               <span className="text-white">Tix</span>
             </h1>
           </Link>
+          <RouterLink to="/" title="Changer de catalogue" aria-label={`Catalogue ${version.toUpperCase()} : changer de version`} className="shrink-0 rounded-md border border-red-500/25 bg-red-500/10 px-2 py-1 text-[10px] font-bold tracking-wide text-red-300 transition-colors hover:bg-red-500/20 focus-visible:outline-2 focus-visible:outline-red-500">
+            {version.toUpperCase()}
+          </RouterLink>
           <NavbarDesktop />
         </div>
 

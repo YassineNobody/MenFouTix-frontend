@@ -1,6 +1,6 @@
 import { Play } from "lucide-react";
 import type { FilmDetailResponse } from "../../../interfaces/film/film";
-import { Link } from "react-router";
+import { Link } from "../../../catalog/navigation";
 import { YoutubeIcon } from "../../Icon/YoutubeIcon";
 
 export const MovieItemBtnGroup = ({ movie }: { movie: FilmDetailResponse }) => {

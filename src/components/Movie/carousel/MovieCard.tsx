@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Star } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "../../../catalog/useCatalogNavigate";
 
 import type { WorkListItemResponse } from "../../../interfaces/work/work";
 

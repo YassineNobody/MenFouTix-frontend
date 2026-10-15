@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
+import { useNavigate } from "../catalog/useCatalogNavigate";
 import { getSeasonEpisodes, getSerieByTmdbId } from "../services/series";
 import { useSeriesWatchProgress } from "./useSeriesWatchProgress";
 

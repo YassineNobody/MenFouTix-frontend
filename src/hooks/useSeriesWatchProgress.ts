@@ -1,4 +1,5 @@
 import { useCallback, useSyncExternalStore } from "react";
+import { useCatalogVersion } from "../catalog/context";
 
 const EVENT = "series-watch-progress";
 
@@ -12,9 +13,10 @@ function subscribe(callback: () => void) {
 }
 
 export function useSeriesWatchProgress(tmdbId: number) {
-  const key = `moviefun:series-progress:${tmdbId}`;
+  const version = useCatalogVersion();
+  const key = `moviefun:${version}:series-progress:${tmdbId}`;
   const snapshot = useSyncExternalStore(subscribe, () => {
-    try { return localStorage.getItem(key); } catch { return null; }
+    try { return localStorage.getItem(key) ?? (version === "vf" ? localStorage.getItem(`moviefun:series-progress:${tmdbId}`) : null); } catch { return null; }
   }, () => null);
 
   let seasonNumber = 1;

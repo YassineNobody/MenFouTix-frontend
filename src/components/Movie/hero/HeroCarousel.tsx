@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 import { CalendarDays, Info, Pause, Play, Star } from "lucide-react";
-import { Link } from "react-router";
+import { Link } from "../../../catalog/navigation";
 
 import type { WorkListItemResponse } from "../../../interfaces/work/work";
 import "./HeroCarousel.css";

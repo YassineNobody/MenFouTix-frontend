@@ -1,4 +1,5 @@
 import axios, { type AxiosInstance } from "axios";
+import { currentCatalog } from "../catalog/catalog";
 import type {
   ContentType,
   QueryParams,
@@ -17,7 +18,7 @@ class Api {
     params: QueryParams = {},
   ): Promise<PaginationResponse<T>> {
     const response = await this.request.get<PaginationResponse<T>>(
-      `/api/${contentType}`,
+      `/api/${currentCatalog()}/${contentType}`,
       { params },
     );
 
@@ -25,17 +26,16 @@ class Api {
   }
 
   async getOne<T>(contentType: ContentType, tmdbId: number): Promise<T> {
-    const response = await this.request.get<T>(`/api/${contentType}/${tmdbId}`);
+    const response = await this.request.get<T>(
+      `/api/${currentCatalog()}/${contentType}/${tmdbId}`,
+    );
 
     return response.data;
   }
 
-  async getSeasonEpisodes<T>(
-    tmdbId: number,
-    seasonNumber: number,
-  ): Promise<T> {
+  async getSeasonEpisodes<T>(tmdbId: number, seasonNumber: number): Promise<T> {
     const response = await this.request.get<T>(
-      `/api/series/${tmdbId}/seasons/${seasonNumber}/episodes`,
+      `/api/${currentCatalog()}/series/${tmdbId}/seasons/${seasonNumber}/episodes`,
     );
 
     return response.data;

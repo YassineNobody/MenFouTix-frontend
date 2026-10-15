@@ -1,5 +1,5 @@
 import { Star } from "lucide-react";
-import { Link } from "react-router";
+import { Link } from "../../../catalog/navigation";
 
 import type { WorkListItemResponse } from "../../../interfaces/work/work";
 

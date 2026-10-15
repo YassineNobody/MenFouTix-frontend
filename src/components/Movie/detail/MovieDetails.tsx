@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link } from "../../../catalog/navigation";
 import type { FilmDetailResponse } from "../../../interfaces/film/film";
 import type { SeriesDetailResponse } from "../../../interfaces/series/series";
 

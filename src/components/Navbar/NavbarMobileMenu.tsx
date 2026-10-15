@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Clapperboard, Menu, Search, Tv2, X } from "lucide-react";
-import { NavLink } from "react-router";
+import { NavLink } from "../../catalog/navigation";
 
 const links = [
   { label: "Films", path: "/movies", icon: Clapperboard },

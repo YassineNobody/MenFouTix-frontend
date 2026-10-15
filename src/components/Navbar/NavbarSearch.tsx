@@ -2,7 +2,8 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { createPortal } from "react-dom";
 import { Search, X } from "lucide-react";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
+import { useNavigate } from "../../catalog/useCatalogNavigate";
 import { WorkListSearch } from "../Movie/search/WorkListSearch";
 import { searchInDatabase } from "../../services/search";
 
@@ -59,7 +60,7 @@ export function NavbarSearch() {
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const query =
     draft ??
-    (location.pathname === "/search"
+    (location.pathname.endsWith("/search")
       ? (new URLSearchParams(location.search).get("q") ?? "")
       : "");
   const trimmedQuery = query.trim();

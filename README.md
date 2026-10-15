@@ -1,4 +1,52 @@
-# React + TypeScript + Vite
+# Menfoutix — frontend VF / VO
+
+## Catalogues
+
+- `/` : page de choix VF / VO, sans appel API.
+- `/vf` et `/vo` : accueil du catalogue choisi.
+- Sous chaque préfixe : `/movies`, `/tv-shows`, `/search`, `/movie/:id`,
+  `/tv/:id`, `/genre/movie/:idCategorieTmbd`, `/genre/tv/:idCategorieTmbd`,
+  `/watch/movie/:id`, `/watch/tv/:id/s/:season/e/:episode`.
+- Les anciennes URL sans préfixe redirigent vers VF en conservant query/hash.
+- Une version inconnue affiche la page 404.
+
+Les pages et services sont réutilisés, pas dupliqués. `src/catalog/navigation.tsx`
+et `useCatalogNavigate.ts` préfixent les liens internes, sans changer les liens
+externes. Le badge VF/VO de la navbar et le lien du footer reviennent au choix.
+Les nouveaux composants doivent utiliser ces liens/navigation pour rester dans
+le catalogue courant (la page de choix utilise les liens React Router normaux).
+
+`src/services/api.ts` sélectionne `/api/vf/...` ou `/api/vo/...` d'après l'URL
+au début de chaque requête. Les query clients sont séparés et recréés au changement
+de catalogue, avec des empreintes de clés incluant VF/VO : aucun résultat partagé
+entre catalogues. La progression des séries utilise des clés localStorage séparées.
+L'ancienne progression sans version reste lue uniquement pour la VF.
+
+## Publication Cloudflare Pages
+
+L'API V2 doit être publiée sur Render **avant le frontend** avec ses deux DB.
+Ajouter la variable de build (également dans `.env` local) :
+
+```env
+VITE_API_URL=https://menfoutix-api.onrender.com
+```
+
+Ne pas ajouter `/api`, `/vf` ou `/vo` à cette URL. Configurer côté Render
+`CORS_ORIGINS=https://menfoutix.pages.dev`. Build : `npm run build`, sortie :
+`dist`. Publier par commit/push. Pages sert cette SPA via `index.html` pour les
+liens directs : ne pas ajouter de `404.html` statique qui désactiverait ce fallback.
+
+Après publication tester choix VF/VO, navigation, recherche, genres et lecture,
+puis recharger directement une fiche `/vo/tv/...` ou `/vf/movie/...`.
+VO signifie version originale ; les sous-titres dépendent des options YouTube.
+Le site ne garantit pas une traduction ou des sous-titres pour chaque vidéo.
+
+```sh
+npm run lint
+npm run build
+```
+
+## Notes du template d'origine
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

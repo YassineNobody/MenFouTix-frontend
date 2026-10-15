@@ -1,5 +1,6 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router";
+import CatalogChoicePage from "./pages/CatalogChoicePage";
+import { CatalogBoundary } from "./catalog/CatalogBoundary";
 import { LayoutRouter } from "./components/Layout/Layout";
 import { ScrollToTop } from "./components/Layout/ScrollToTop";
 import HomePage from "./pages/HomePage/HomePage";
@@ -14,14 +15,16 @@ import SearchPage from "./pages/SearchPage/SearchPage";
 import WatchMoviePage from "./pages/WatchPage/WatchMoviePage";
 import WatchSeriePage from "./pages/WatchPage/WatchSeriePage";
 
-const client = new QueryClient();
-function App() {
+function LegacyRedirect() {
+  const location = useLocation();
+  return <Navigate replace to={`/vf${location.pathname}${location.search}${location.hash}`} />;
+}
+export function CatalogRoutes() {
   return (
-    <QueryClientProvider client={client}>
-      <BrowserRouter>
-        <ScrollToTop />
         <Routes>
-          <Route path="/" element={<LayoutRouter />}>
+          <Route path="/" element={<CatalogChoicePage />} />
+          <Route path="/:catalog" element={<CatalogBoundary />}>
+          <Route element={<LayoutRouter />}>
             <Route index element={<HomePage />} />
             <Route path="search" element={<SearchPage />} />
             <Route path="movie/:id" element={<MoviePage />} />
@@ -38,15 +41,22 @@ function App() {
             />
             <Route path="*" element={<NotFoundPage />} />
           </Route>
-          <Route path="/watch/movie/:id" element={<WatchMoviePage />} />
+          <Route path="watch/movie/:id" element={<WatchMoviePage />} />
           <Route
-            path="/watch/tv/:id/s/:season/e/:episode"
+            path="watch/tv/:id/s/:season/e/:episode"
             element={<WatchSeriePage />}
           />
+          </Route>
+          {['movies', 'tv-shows', 'search', 'movie/:id', 'tv/:id', 'genre/movie/:idCategorieTmbd', 'genre/tv/:idCategorieTmbd', 'watch/movie/:id', 'watch/tv/:id/s/:season/e/:episode'].map(path => (
+            <Route key={path} path={`/${path}`} element={<LegacyRedirect />} />
+          ))}
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
-      </BrowserRouter>
-    </QueryClientProvider>
   );
+}
+
+function App() {
+  return <BrowserRouter><ScrollToTop /><CatalogRoutes /></BrowserRouter>;
 }
 
 export default App;

@@ -1,5 +1,6 @@
 import { ArrowLeft, Home } from "lucide-react";
-import { Link, useNavigate } from "react-router";
+import { Link } from "../../catalog/navigation";
+import { useNavigate } from "../../catalog/useCatalogNavigate";
 
 export default function NotFoundPage() {
   const navigate = useNavigate();

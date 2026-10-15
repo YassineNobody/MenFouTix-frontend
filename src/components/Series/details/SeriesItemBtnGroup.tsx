@@ -1,5 +1,5 @@
 import { Play } from "lucide-react";
-import { Link } from "react-router";
+import { Link } from "../../../catalog/navigation";
 import { YoutubeIcon } from "../../Icon/YoutubeIcon";
 import type { SeriesDetailResponse } from "../../../interfaces/series/series";
 import { useSeriesWatchProgress } from "../../../hooks/useSeriesWatchProgress";

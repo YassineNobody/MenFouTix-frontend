@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router";
+import { Link } from "../../../catalog/navigation";
 import { getSeasonEpisodes } from "../../../services/series";
 import { SeasonEpisodeListSkeleton } from "../Skeleton/SeasonEpisodeListSkeleton";
 

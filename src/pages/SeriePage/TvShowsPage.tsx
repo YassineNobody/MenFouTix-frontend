@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "../../catalog/useCatalogNavigate";
 import { GenreCarousel } from "../../components/Movie/carousel/GenreCarousel";
 import { GenreCarouselSkeleton } from "../../components/Movie/carousel/GenreCarouselSkeleton";
 import { GenresSeriesCarousel } from "../../components/Series/GenresSeriesCarousel";

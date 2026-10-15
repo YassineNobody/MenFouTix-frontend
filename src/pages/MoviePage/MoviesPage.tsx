@@ -6,7 +6,7 @@ import { LatestReleasesMoviesCarousel } from "../../components/Movie/carousel/La
 import { RecentReleasesCarousel } from "../../components/Movie/hero/RecentReleasesCarousel.tsx";
 import { useGenres } from "../../hooks/useGenres.tsx";
 import type { GenreResponse } from "../../interfaces/genre/genre.ts";
-import { useNavigate } from "react-router";
+import { useNavigate } from "../../catalog/useCatalogNavigate";
 export default function MoviesPage() {
   const navigate = useNavigate();
   const { data: genres, isLoading, isError } = useGenres("film");

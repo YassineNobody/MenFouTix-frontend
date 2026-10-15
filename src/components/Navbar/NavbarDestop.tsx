@@ -1,5 +1,5 @@
 import { Clapperboard, Search, Tv2 } from "lucide-react";
-import { NavLink } from "react-router";
+import { NavLink } from "../../catalog/navigation";
 
 const links = [
   {

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
-import { Link, useParams, useSearchParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
+import { Link } from "../../catalog/navigation";
 
 import { MovieGridCard } from "../../components/Movie/carousel/MovieGridCard";
 import { MovieListCard } from "../../components/Movie/carousel/MovieListCard";
