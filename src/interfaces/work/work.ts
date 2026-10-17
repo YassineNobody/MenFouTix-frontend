@@ -1,4 +1,7 @@
+import type { Availability } from "./video";
+
 export interface WorkListItemResponse {
+  availability: Availability;
   tmdbId: number;
   type: "film" | "série";
 

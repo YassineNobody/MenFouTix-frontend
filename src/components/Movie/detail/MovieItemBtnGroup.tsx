@@ -2,8 +2,12 @@ import { Play } from "lucide-react";
 import type { FilmDetailResponse } from "../../../interfaces/film/film";
 import { Link } from "../../../catalog/navigation";
 import { YoutubeIcon } from "../../Icon/YoutubeIcon";
+import { useCatalogVersion } from "../../../catalog/context";
+import { selectMedia } from "../../../catalog/media";
 
 export const MovieItemBtnGroup = ({ movie }: { movie: FilmDetailResponse }) => {
+  const version = useCatalogVersion();
+  const video = selectMedia(movie.videos, version);
   return (
     <div className="flex flex-wrap gap-3 w-full min-w-0">
       <Link
@@ -15,8 +19,8 @@ export const MovieItemBtnGroup = ({ movie }: { movie: FilmDetailResponse }) => {
       </Link>
       <Link
         to={
-          movie.video
-            ? `https://www.youtube.com/watch?v=${encodeURIComponent(movie.video.videoId)}`
+          video
+            ? `https://www.youtube.com/watch?v=${encodeURIComponent(video.videoId)}`
             : "#"
         }
         target="_blank"

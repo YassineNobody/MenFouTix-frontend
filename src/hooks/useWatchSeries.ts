@@ -4,8 +4,11 @@ import { useParams } from "react-router";
 import { useNavigate } from "../catalog/useCatalogNavigate";
 import { getSeasonEpisodes, getSerieByTmdbId } from "../services/series";
 import { useSeriesWatchProgress } from "./useSeriesWatchProgress";
+import { useCatalogVersion } from "../catalog/context";
+import { selectMedia } from "../catalog/media";
 
 export function useWatchSeries() {
+  const version = useCatalogVersion();
   const { id, season, episode } = useParams();
   const navigate = useNavigate();
   const tmdbId = Number(id);
@@ -76,7 +79,7 @@ export function useWatchSeries() {
     : index >= 0 && nextSeason && firstNext
       ? { seasonNumber: nextSeason.seasonNumber, episodeNumber: firstNext.episodeNumber }
       : undefined;
-  const videoId = current?.video?.videoId;
+  const videoId = selectMedia(current?.videos ?? [], version)?.videoId;
   const loading = valid && (seriesQuery.isPending || episodesQuery.isPending);
   const failed = seriesQuery.isError || episodesQuery.isError;
   const title =

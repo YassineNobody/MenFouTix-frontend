@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "../../../catalog/navigation";
 import { getSeasonEpisodes } from "../../../services/series";
 import { SeasonEpisodeListSkeleton } from "../Skeleton/SeasonEpisodeListSkeleton";
+import { useCatalogVersion } from "../../../catalog/context";
+import { selectMedia } from "../../../catalog/media";
 
 interface Props {
   tmdbId: number;
@@ -9,6 +11,7 @@ interface Props {
 }
 
 export function SeasonEpisodeList({ tmdbId, seasonNumber }: Props) {
+  const version = useCatalogVersion();
   const { data, isPending, isError } = useQuery({
     queryKey: ["seasonEpisodes", tmdbId, seasonNumber],
     queryFn: () => getSeasonEpisodes(tmdbId, seasonNumber),
@@ -37,7 +40,8 @@ export function SeasonEpisodeList({ tmdbId, seasonNumber }: Props) {
               episode.titleEn ??
               `Épisode ${episode.episodeNumber}`;
             const synopsis = episode.synopsisFr ?? episode.synopsisEn;
-            const image = episode.stillUrl ?? episode.video?.thumbnailUrl;
+            const video = selectMedia(episode.videos, version);
+            const image = episode.stillUrl ?? video?.thumbnailUrl;
 
             return (
               <li
@@ -77,13 +81,13 @@ export function SeasonEpisodeList({ tmdbId, seasonNumber }: Props) {
                     </p>
                   )}
                   <p className="mt-2 text-xs text-zinc-400">
-                    {episode.video ? "Vidéo disponible" : "Vidéo pas encore disponible"}
+                    {video ? "Vidéo disponible" : "Vidéo pas encore disponible"}
                   </p>
                   <Link
                     to={`/watch/tv/${tmdbId}/s/${seasonNumber}/e/${episode.episodeNumber}`}
                     className="mt-3 inline-flex rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-white transition-colors hover:bg-white/10"
                   >
-                    {episode.video?.videoId ? "Regarder l’épisode" : "Ouvrir l’épisode"}
+                    {video?.videoId ? "Regarder l’épisode" : "Ouvrir l’épisode"}
                   </Link>
                 </div>
               </li>

@@ -1,12 +1,8 @@
 import type { WorkDetailResponse } from "../work/workDetails";
+import type { VideoResponse } from "../work/video";
 
 
 export interface FilmDetailResponse extends WorkDetailResponse {
   type: 'film';
-  video: {
-    videoId: string;
-    sourceTitle: string;
-    thumbnailUrl: string | null;
-    definition: string | null;
-  } | null;
+  videos: VideoResponse[];
 }
