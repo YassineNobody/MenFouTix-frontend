@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { ChevronDown, ListVideo } from "lucide-react";
 import type { WatchSeriesNavigationProps } from "./WatchSeriesNavigation";
+import { useCatalogVersion } from "../../../catalog/context";
+import { selectMedia } from "../../../catalog/media";
 
 type Props = Pick<WatchSeriesNavigationProps,
   "seasonNumber" | "episodeNumber" | "loading" | "failed" | "seasons" | "episodes" | "openEpisode"
@@ -9,6 +11,7 @@ type Props = Pick<WatchSeriesNavigationProps,
 export function WatchSeriesEpisodeMenu({
   seasonNumber, episodeNumber, loading, failed, seasons, episodes, openEpisode, buttonClassName,
 }: Props) {
+  const version = useCatalogVersion();
   const [open, setOpen] = useState(false);
   const container = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
@@ -66,7 +69,7 @@ export function WatchSeriesEpisodeMenu({
                     className={`w-full rounded-lg px-3 py-2.5 text-left text-sm transition-colors focus-visible:outline-2 focus-visible:outline-red-500 ${item.episodeNumber === episodeNumber ? "bg-red-600/20 text-red-300" : "text-zinc-200 hover:bg-white/10"}`}>
                     <span className="block font-medium">Épisode {item.episodeNumber}</span>
                     {(item.titleFr ?? item.titleEn) && <span className="mt-0.5 block text-xs text-zinc-400">{item.titleFr ?? item.titleEn}</span>}
-                    {!item.video?.videoId && <span className="mt-1 block text-xs text-zinc-500">Lien vidéo indisponible</span>}
+                    {!selectMedia(item.videos, version)?.videoId && <span className="mt-1 block text-xs text-zinc-500">Lien vidéo indisponible</span>}
                   </button>
                 </li>
               ))}</ul>}

@@ -7,6 +7,10 @@ import { Pagination } from "../../components/Pagination/Pagination";
 import { SearchInput } from "../../components/Search/SearchInput";
 import { searchInDatabase } from "../../services/search";
 import { Film } from "lucide-react";
+import { SearchFilters } from "../../components/Search/SearchFilters";
+import { ContentType, type QueryParams } from "../../interfaces/common";
+import type { WorkListItemResponse } from "../../interfaces/work/work";
+import { api } from "../../services/api";
 
 const PAGE_SIZE = 20;
 
@@ -18,6 +22,8 @@ export default function SearchPage() {
   const input = draft ?? query;
 
   const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const latestParams = useRef(searchParams);
+  useEffect(() => { latestParams.current = searchParams; }, [searchParams]);
 
   const type = searchParams.get("type");
   const selectedType = type === "film" || type === "série" ? type : undefined;
@@ -45,7 +51,7 @@ export default function SearchPage() {
     }
 
     searchTimer.current = setTimeout(() => {
-      const next = new URLSearchParams(searchParams);
+      const next = new URLSearchParams(latestParams.current);
       const trimmed = value.trim();
 
       if (trimmed) {
@@ -60,18 +66,24 @@ export default function SearchPage() {
     }, 450);
   };
 
+  const filters: QueryParams = { type: selectedType, page, limit: PAGE_SIZE };
+  for (const key of ["genreId", "actorId", "releaseYear", "releaseYearFrom", "releaseYearTo", "minTmdbRating", "minOurRating"] as const) {
+    const raw = searchParams.get(key);
+    const value = Number(raw);
+    const isRating = key === "minTmdbRating" || key === "minOurRating";
+    const min = key === "minTmdbRating" ? 0 : 1;
+    const max = key === "minTmdbRating" ? 10 : key === "minOurRating" ? 5 : key.startsWith("releaseYear") ? 9999 : Number.MAX_SAFE_INTEGER;
+    if (raw?.trim() && Number.isFinite(value) && value >= min && value <= max && (isRating || Number.isSafeInteger(value))) filters[key] = value;
+  }
+  const sort = searchParams.get("sort");
+  if (sort && ["title", "releaseDate", "tmdbRating", "ourRating", "recentlyAdded"].includes(sort)) filters.sort = sort as QueryParams["sort"];
+  const hasCriteria = Boolean(query || selectedType || filters.sort || Object.keys(filters).some((key) => !["type", "page", "limit"].includes(key)));
+
   const { data, isPending, isError } = useQuery({
-    queryKey: ["search", query, selectedType, page],
+    queryKey: ["search", query, filters],
     queryFn: () =>
-      searchInDatabase({
-        query,
-        params: {
-          type: selectedType,
-          page,
-          limit: PAGE_SIZE,
-        },
-      }),
-    enabled: query.length > 0,
+      query ? searchInDatabase({ query, params: filters }) : api.getAll<WorkListItemResponse>(ContentType.CATALOG, filters),
+    enabled: hasCriteria,
   });
 
   const changePage = (nextPage: number) => {
@@ -98,16 +110,18 @@ export default function SearchPage() {
           <SearchInput value={input} onChange={updateInput} />
         </div>
 
+        <SearchFilters params={searchParams} onApply={(next) => setSearchParams(next)} />
+
         {/* Espace restant */}
         <div className="flex flex-1 flex-col">
-          {!query ? (
+          {!hasCriteria ? (
             <div className="flex flex-1 items-center flex-col justify-center p-6">
               <Film
                 size={24}
                 className="lucide lucide-film w-16 h-16 text-white opacity-10 mb-4"
               />
-              <p className="text-white/40">Aucun résultat trouvé</p>
-              <p className="text-white/40 text-sm mt-2">Essayer de modifier vos critères</p>
+              <p className="text-white/40">Rechercher dans le catalogue</p>
+              <p className="text-white/40 text-sm mt-2">Saisis un titre ou choisis des filtres.</p>
             </div>
           ) : isError ? (
             <div className="flex flex-1 items-center justify-center p-6">
@@ -131,8 +145,7 @@ export default function SearchPage() {
           ) : data ? (
             <>
               <p className="mb-5 text-sm text-zinc-400">
-                {data.total} résultat{data.total > 1 ? "s" : ""} pour « {query}{" "}
-                »
+                {data.total} résultat{data.total > 1 ? "s" : ""}{query ? ` pour « ${query} »` : " selon vos critères"}
               </p>
 
               {data.items.length === 0 ? (

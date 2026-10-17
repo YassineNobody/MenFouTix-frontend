@@ -1,5 +1,33 @@
 # Menfoutix — frontend VF / VO
 
+## Branche frontend-api-v2 — adaptation à la DB unifiée
+
+La navigation et le lecteur existants restent identiques : choix VF/VO à la racine,
+pages sous `/vf/...` et `/vo/...`. **Ne pas supprimer ces routes frontend.**
+En revanche l'API appelée n'a plus ces préfixes : `/api/films?version=VF`,
+`/api/films?version=VO`, etc. `src/services/api.ts` transmet automatiquement la
+version selon l'URL frontend pour les listes, genres, fiches et épisodes.
+Les services métier ne sont pas dupliqués. `QueryParams.version` permet aussi
+explicitement `VF`, `VO`, `VF,VO` ou `VO,VF` pour une future utilisation.
+
+Les interfaces suivent désormais l'API unifiée : `availability`, `videos[]`,
+`playlists[]` ; les champs `video` et `youtubePlaylistId` ont été retirés.
+`selectMedia` choisit exclusivement le média de la version du catalogue courant,
+sans fallback automatique VF/VO. En cas d'absence, les messages/liens indisponibles
+existants sont conservés. Aucun sélecteur de version n'est ajouté au lecteur.
+Le cache et la progression restent isolés par catalogue comme avant.
+Les paramètres de sous-titres VO ajoutés précédemment sont conservés.
+
+Cette branche requiert l'API unifiée de la branche backend `apiv2` : les anciens
+backends VF/VO ne sont pas compatibles avec ces réponses. Tester localement avec
+`VITE_API_URL=http://localhost:3000`, puis publier les deux parties de façon
+coordonnée. Aucun push/déploiement n'est effectué par la migration locale.
+
+Vérifier le contrat client sans requête réseau : `npm run test:api-v2`.
+
+Les notes ci-dessous sur les URL **frontend** restent valables. Les mentions
+d'anciens préfixes d'API sont remplacées par le contrat de cette section.
+
 ## Catalogues
 
 - `/` : page de choix VF / VO, sans appel API.
@@ -16,7 +44,7 @@ externes. Le badge VF/VO de la navbar et le lien du footer reviennent au choix.
 Les nouveaux composants doivent utiliser ces liens/navigation pour rester dans
 le catalogue courant (la page de choix utilise les liens React Router normaux).
 
-`src/services/api.ts` sélectionne `/api/vf/...` ou `/api/vo/...` d'après l'URL
+`src/services/api.ts` sélectionne `?version=VF` ou `?version=VO` d'après l'URL
 au début de chaque requête. Les query clients sont séparés et recréés au changement
 de catalogue, avec des empreintes de clés incluant VF/VO : aucun résultat partagé
 entre catalogues. La progression des séries utilise des clés localStorage séparées.

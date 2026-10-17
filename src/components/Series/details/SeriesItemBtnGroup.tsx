@@ -3,18 +3,22 @@ import { Link } from "../../../catalog/navigation";
 import { YoutubeIcon } from "../../Icon/YoutubeIcon";
 import type { SeriesDetailResponse } from "../../../interfaces/series/series";
 import { useSeriesWatchProgress } from "../../../hooks/useSeriesWatchProgress";
+import { useCatalogVersion } from "../../../catalog/context";
+import { selectMedia } from "../../../catalog/media";
 
 export const SerieItemBtnGroup = ({
   serie,
 }: {
   serie: SeriesDetailResponse;
 }) => {
+  const version = useCatalogVersion();
+  const playlist = selectMedia(serie.playlists, version);
   const progress = useSeriesWatchProgress(serie.tmdbId);
   const seasonNumber = serie.seasons.some((season) => season.seasonNumber === progress.seasonNumber)
     ? progress.seasonNumber : 1;
   const episodeNumber = seasonNumber === progress.seasonNumber ? progress.episodeNumber : 1;
-  const playlistUrl = serie.youtubePlaylistId
-    ? `https://www.youtube.com/playlist?list=${encodeURIComponent(serie.youtubePlaylistId)}`
+  const playlistUrl = playlist
+    ? `https://www.youtube.com/playlist?list=${encodeURIComponent(playlist.playlistId)}`
     : null;
   return (
     <div className="flex flex-wrap gap-3 w-full min-w-0">

@@ -1,5 +1,6 @@
 import axios, { type AxiosInstance } from "axios";
 import { currentCatalog } from "../catalog/catalog";
+import { videoVersion } from "../catalog/media";
 import type {
   ContentType,
   QueryParams,
@@ -18,16 +19,26 @@ class Api {
     params: QueryParams = {},
   ): Promise<PaginationResponse<T>> {
     const response = await this.request.get<PaginationResponse<T>>(
-      `/api/${currentCatalog()}/${contentType}`,
-      { params },
+      `/api/${contentType}`,
+      {
+        params: {
+          ...params,
+          version: params.version ?? videoVersion(currentCatalog()),
+        },
+      },
     );
 
     return response.data;
   }
 
-  async getOne<T>(contentType: ContentType, tmdbId: number): Promise<T> {
+  async getOne<T>(
+    contentType: ContentType,
+    tmdbId: number,
+    params: Pick<QueryParams, "version"> = {},
+  ): Promise<T> {
     const response = await this.request.get<T>(
-      `/api/${currentCatalog()}/${contentType}/${tmdbId}`,
+      `/api/${contentType}/${tmdbId}`,
+      { params: { version: params.version ?? videoVersion(currentCatalog()) } },
     );
 
     return response.data;
@@ -35,7 +46,8 @@ class Api {
 
   async getSeasonEpisodes<T>(tmdbId: number, seasonNumber: number): Promise<T> {
     const response = await this.request.get<T>(
-      `/api/${currentCatalog()}/series/${tmdbId}/seasons/${seasonNumber}/episodes`,
+      `/api/series/${tmdbId}/seasons/${seasonNumber}/episodes`,
+      { params: { version: videoVersion(currentCatalog()) } },
     );
 
     return response.data;

@@ -1,4 +1,5 @@
 import type { useWatchSeries } from "../../../hooks/useWatchSeries";
+import { useCatalogVersion } from "../../../catalog/context";
 
 type Props = Pick<ReturnType<typeof useWatchSeries>,
   "loading" | "failed" | "valid" | "videoId" | "title" | "seasonNumber" |
@@ -7,12 +8,13 @@ type Props = Pick<ReturnType<typeof useWatchSeries>,
 export function WatchSeriesPlayer({
   loading, failed, valid, videoId, title, seasonNumber, episodeNumber, current,
 }: Props) {
+  const version = useCatalogVersion();
   return (
 !loading && !failed && valid && videoId ? (
         <div className="h-full w-full overflow-hidden bg-black">
           <iframe
             key={videoId}
-            src={`https://www.youtube.com/embed/${encodeURIComponent(videoId)}`}
+            src={`https://www.youtube.com/embed/${encodeURIComponent(videoId)}${version === "vo" ? "?cc_load_policy=1&cc_lang_pref=fr&hl=fr" : ""}`}
             title={`${title} — Saison ${seasonNumber}, épisode ${episodeNumber}`}
             className="h-full w-full border-0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

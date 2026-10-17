@@ -1,4 +1,8 @@
+import type { Availability, PlaylistResponse } from "./video";
+
 export interface WorkDetailResponse {
+  availability: Availability;
+  playlists: PlaylistResponse[];
   tmdbId: number;
   type: 'film' | 'série';
 
@@ -14,7 +18,6 @@ export interface WorkDetailResponse {
   backdropUrl: string | null;
   logoUrl: string | null;
   trailerUrl: string | null;
-  youtubePlaylistId: string | null;
 
   tmdbVoteAverage: number | null;
   tmdbVoteCount: number | null;

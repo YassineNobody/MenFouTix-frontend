@@ -1,4 +1,5 @@
 import type { WorkDetailResponse } from "../work/workDetails";
+import type { Availability, VideoResponse } from "../work/video";
 export interface SeasonSummaryResponse {
   tmdbSeasonId: number | null;
   seasonNumber: number;
@@ -17,6 +18,7 @@ export interface SeriesDetailResponse extends WorkDetailResponse {
 }
 
 export interface EpisodeResponse {
+  availability: Availability;
   tmdbEpisodeId: number;
   episodeNumber: number;
   titleFr: string | null;
@@ -29,12 +31,7 @@ export interface EpisodeResponse {
   tmdbVoteAverage: number | null;
   tmdbVoteCount: number | null;
   directors: string[];
-  video: {
-    videoId: string;
-    sourceTitle: string;
-    thumbnailUrl: string | null;
-    definition: string | null;
-  } | null;
+  videos: VideoResponse[];
 }
 
 export interface SeasonEpisodesResponse {
