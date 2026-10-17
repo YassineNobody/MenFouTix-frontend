@@ -27,7 +27,7 @@ function SearchSuggestions({
   if (!query.trim()) return null;
 
   return (
-    <div className="w-full overflow-hidden rounded-xl border border-white/15 bg-black/95 shadow-2xl">
+    <div className="w-full overflow-hidden rounded-xl border border-white/15 bg-zinc-950 shadow-2xl">
       {loading ? (
         <p className="px-4 py-5 text-sm text-zinc-400">Recherche en cours…</p>
       ) : error ? (
@@ -215,8 +215,9 @@ export function NavbarSearch() {
               role="dialog"
               aria-modal="true"
               aria-label="Rechercher un film ou une série"
-              className="fixed inset-x-0 top-0 max-h-[100dvh] overflow-y-auto bg-linear-to-b from-black/85 via-black/40 to-transparent px-4 pt-4 pb-8"
+              className="fixed inset-x-0 top-0 bg-[#080808] after:pointer-events-none after:absolute after:inset-x-0 after:top-full after:h-20 after:bg-linear-to-b after:from-[#080808] after:to-transparent"
             >
+              <div className="max-h-[100dvh] overflow-y-auto px-4 pt-4 pb-4">
               <div className="flex items-center gap-3">
                 <form
                   onSubmit={submit}
@@ -238,7 +239,7 @@ export function NavbarSearch() {
                     onChange={(event) => updateQuery(event.target.value)}
                     placeholder="Rechercher un film ou une série…"
                     autoComplete="off"
-                    className="w-full rounded-xl border border-white/15 bg-white/10 py-3 pl-10 pr-4 text-sm text-white placeholder-gray-500 focus:border-red-500/50 focus:outline-none"
+                    className="w-full rounded-xl border border-white/15 bg-zinc-900 py-3 pl-10 pr-4 text-sm text-white placeholder-gray-500 focus:border-red-500/50 focus:outline-none"
                   />
                 </form>
                 <button
@@ -262,6 +263,7 @@ export function NavbarSearch() {
                   onSelect={selectWork}
                   onMore={openResults}
                 />
+              </div>
               </div>
             </div>
           </div>,
